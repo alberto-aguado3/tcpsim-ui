@@ -1,33 +1,14 @@
 import React, { useState } from "react";
-import {Button, Input} from "@mui/material";
+import { Container, CssBaseline } from "@mui/material";
+import { Tasks } from "./tasks";
 
 export const App = () => {
-    
-    const [itemDescription, setItemDescription] = useState<string>("");
-    const [items, setItems] = useState<string[]>([]);
-
     return (
-        <div>
-            <Input
-             value={itemDescription}
-             onChange={(event) => {
-                event.preventDefault(); //
-                setItemDescription(event.target.value);
-             }}
-            />
-            <Button
-                onClick={()=>{
-                    if (itemDescription !== "") {
-                        setItems([...items, itemDescription]);
-                    }
-                    setItemDescription("");
-                }}
-            >
-                Create
-            </Button>
-            <ul>
-                {items.map((item) => <li>{item}</li>)}
-            </ul>
-        </div>
+        <>
+            <Container maxWidth={"lg"}>
+                <CssBaseline />
+                <Tasks />
+            </Container >
+        </>
     );
 };
