@@ -23,7 +23,9 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.12.3",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "redux": "^4.2.1",
+    "tcpsim-logic": "^1.0.0"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.21.8",
