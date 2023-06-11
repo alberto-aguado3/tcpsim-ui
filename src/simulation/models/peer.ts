@@ -1,7 +1,7 @@
-import { GetConnectionStateString, Peer as LogicPeer } from "tcpsim-logic";
-import { DataBuffer } from "tcpsim-logic/dist/peer";
-import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
-import { Application as ApplicationLogic } from "tcpsim-logic/dist/peer";
+import { GetConnectionStateString, Peer as LogicPeer, Application as ApplicationLogic, TransmissionControlBlock, DataBuffer } from "tcpsim-logic";
+//import { DataBuffer } from "tcpsim-logic/dist/peer";
+//import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
+//import { Application as ApplicationLogic } from "tcpsim-logic/dist/peer";
 
 export class Peer2 {
     public controlBlock: ControlBlock;

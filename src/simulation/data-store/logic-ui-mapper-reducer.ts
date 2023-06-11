@@ -1,11 +1,10 @@
-import { parseSync } from "@babel/core";
 import { createReducer, createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Application as LogicApplication, DataBuffer } from "tcpsim-logic/dist/peer";
+//import { Application as LogicApplication, DataBuffer } from "tcpsim-logic/dist/peer";
 import { Application, Buffer, ConnectionState, ControlBlock, Peer } from "../models";
 import { logicInitialState, LogicState } from "./logic-slice";
 import { uiInitialState, UiState } from "./ui-slice";
-import { GetConnectionStateString, Peer as LogicPeer } from "tcpsim-logic";
-import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
+import { GetConnectionStateString, Peer as LogicPeer, Simulation } from "tcpsim-logic";
+//import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
 
 
 
@@ -23,10 +22,11 @@ const logicUiMapperSlice = createSlice({
     name: "mapper",
     initialState: initialState,
     reducers: {
-        mapLogicToUi: (state) => {
+        mapLogicToUi: (state, action: PayloadAction<Simulation>) => {
             console.log("mapLogicToUi - about to run");
-            const actPeer = state.logic.data.getActivePeer();
-            const pasPeer = state.logic.data.getPassivePeer();
+            const actPeer = action.payload.getActivePeer();
+            const pasPeer = action.payload.getPassivePeer();
+
             /*
             state.ui.simulator.activePeer.mapLogicPeer(actPeer);
             state.ui.simulator.passivePeer.mapLogicPeer(pasPeer);

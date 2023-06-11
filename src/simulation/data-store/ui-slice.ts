@@ -1,7 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Peer as LogicPeer, Simulation } from "tcpsim-logic";
-import { Application as LogicApplication, DataBuffer, GetConnectionStateString } from "tcpsim-logic/dist/peer";
-import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
+import { Peer as LogicPeer, Simulation, TransmissionControlBlock, Application as LogicApplication, DataBuffer, GetConnectionStateString } from "tcpsim-logic";
+//import { Simulation } from "tcpsim-logic/dist/simulation";
+//import { Peer as LogicPeer, Application as LogicApplication, DataBuffer, GetConnectionStateString } from "tcpsim-logic/dist/peer";
+//import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
 import { Application, ControlBlock, Buffer, Peer, Channel, ConnectionState } from "../models";
 import { getUiInitialState } from "./init-states";
 
@@ -11,7 +12,7 @@ export interface UiState {
     channel: Channel
 }
 
-//------------------------------BORRAR----------------------
+//TODO: refactor into "mapper-service.ts ???"
 function mapLogicToUiPeer(peer: LogicPeer): Peer {
     return {
         application: mapLogicToUiApplication(peer.application),
@@ -58,19 +59,19 @@ function mapLogicToUiRecvBuffer(rcvBuffer: DataBuffer): Buffer {
     };
 }
 
-//----------------------------------------------------------
-
 export const uiInitialState: UiState = getUiInitialState();
 
-const uiSlice = createSlice({
-    name: "ui-simulator",
+const simulatorSlice = createSlice({
+    name: "simulator",
     initialState: uiInitialState,
     reducers: {
-        updatePeers: (state, action: PayloadAction<Simulation>) => {
+        updateSimUiData: (state, action: PayloadAction<Simulation>) => {
             const actPeer = action.payload.getActivePeer();
             const pasPeer = action.payload.getPassivePeer();
             state.activePeer = mapLogicToUiPeer(actPeer);
             state.passivePeer = mapLogicToUiPeer(pasPeer);
+
+            //TODO: get segments as state in some way
             /*
             return {
                 
@@ -83,5 +84,5 @@ const uiSlice = createSlice({
     }
 });
 
-export const { updatePeers } = uiSlice.actions;
-export default uiSlice.reducer;
+export const { updateSimUiData } = simulatorSlice.actions;
+export default simulatorSlice.reducer;

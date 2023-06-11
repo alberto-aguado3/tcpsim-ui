@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //import { Simulation } from "tcpsim-logic";
-import { mapLogicToUi, nextStep, startSimulation } from "../data-store";
+import { inicializarSimulation, mapLogicToUi, nextStep, startSimulation, updateSimUiData, simulation } from "../data-store";
 import { RootState } from "../data-store/store";
 import { Peer } from "../models";
 
@@ -13,23 +13,22 @@ export const InitialSequenceNumber = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const accionMapeo = mapLogicToUi();
+        //const accion = startSimulation();
+        //dispatch(accion);
+        inicializarSimulation();
+        const accionMapeo = updateSimUiData(simulation);
         dispatch(accionMapeo);
-        const accion = startSimulation();
-        dispatch(accion);
-        const accionMapeo2 = mapLogicToUi();
-        dispatch(accionMapeo2);
 
     }, []);
 
     const activePeer: Peer = useSelector((state: RootState) => {
         
-        return state.ui.activePeer;
+        return state.simulator.activePeer;
     });
 
     const passivePeer: Peer = useSelector((state: RootState) => {
         
-        return state.ui.passivePeer;
+        return state.simulator.passivePeer;
     });
 
     /*
@@ -64,10 +63,10 @@ export const InitialSequenceNumber = () => {
             <div>{passivePeer.controlBlock.srcIp}</div>
             <div>{passivePeer.controlBlock.connectionState}</div>
             <button onClick={(e) => {
-                const accionMapeo = mapLogicToUi();
+                simulation.runNextStep();
+                const accionMapeo = updateSimUiData(simulation);
                 dispatch(accionMapeo);
-                const accion = nextStep();
-                dispatch(accion);
+                
                 console.log("Acciones despachadas, has pulsado botton");
             }
             }>Siguiente evento</button>
