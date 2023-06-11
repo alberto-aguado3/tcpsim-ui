@@ -2,7 +2,7 @@ import { act } from "react-dom/test-utils";
 import { Channel } from "./channel";
 import { Peer } from "./peer";
 
-export class Simulator {
+export class Simulator2 {
     public activePeer: Peer;
     public passivePeer: Peer;
     public channel: Channel;
@@ -14,4 +14,3 @@ export class Simulator {
         this.channel = channel;
     }
 }
-

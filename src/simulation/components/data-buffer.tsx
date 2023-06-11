@@ -1,10 +1,12 @@
 import { Button, ButtonGroup } from "@mui/material";
 import React, { useState } from "react";
-import { Peer, PeerBuilder, PeerConfig } from "tcpsim-logic/src";
+import { act } from "react-dom/test-utils";
+import { useSelector } from "react-redux";
+import { RootState } from "../data-store/store";
 import { InitialSequenceNumber } from "./initial-sequence-number";
 
 export const DataBuffer = () => {
-    const [data, setData] = useState<DataCell[]>([]);    
+    const [data, setData] = useState<DataCell[]>([]);
     
     return (
         <ButtonGroup >

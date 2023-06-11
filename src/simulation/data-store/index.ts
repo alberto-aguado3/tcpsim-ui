@@ -1,2 +1,2 @@
-export { NEXT_STEP } from "./actions";
-export { nextStep, startSimulation } from "./logicSlice";
+export { nextStep, startSimulation } from "./logic-slice";
+export { mapLogicToUi } from "./logic-ui-mapper-reducer";

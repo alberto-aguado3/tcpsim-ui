@@ -1,4 +1,4 @@
-import { configureStore, compose } from "@reduxjs/toolkit";
+import { configureStore, compose, getDefaultMiddleware } from "@reduxjs/toolkit";
 import rootReducer from "./reducers";
 
 declare global {
@@ -20,6 +20,26 @@ const store = configureStore({
     reducer: rootReducer,
     //config extra
     devTools: true,
+    middleware: (getDefaultMiddleware) => {
+      return getDefaultMiddleware({
+        serializableCheck: {
+          /*
+          isSerializable: (value: any) => {
+            console.log("isSerializableMiddleware. value=", value, typeof value !== "undefined" && typeof value !== "object");
+            return typeof value !== "undefined" && typeof value !== "object";
+          },
+          */
+          ignoredPaths: ["logic.data", "mapper.logic.data"]//, "root.logic.data", "root.mapper.logic.data"], 
+        }
+      });
+    },
+    /*
+    middleware: getDefaultMiddleware({
+      serializableCheck: {
+        ignoredPaths: ["logic.data", "mapper.logic.data"]
+      }
+    })
+    */
 });
 
 export type RootState = ReturnType<typeof store.getState>;
