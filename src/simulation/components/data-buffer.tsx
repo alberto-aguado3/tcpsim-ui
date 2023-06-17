@@ -1,22 +1,21 @@
 import { Button, ButtonGroup } from "@mui/material";
 import React, { useState } from "react";
+import { Buffer } from "../models";
 import { act } from "react-dom/test-utils";
 import { useSelector } from "react-redux";
 import { RootState } from "../data-store/store";
-import { InitialSequenceNumber } from "./initial-sequence-number";
 
-export const DataBuffer = () => {
-    const [data, setData] = useState<DataCell[]>([]);
+interface DataBufferProps {
+    buffer: Buffer
+}
+
+export const DataBuffer: React.FC<DataBufferProps> = ({buffer}) => {
     
     return (
         <ButtonGroup >
-            {data.map((cellData) => {
-                return <Button disabled={true}>{"" ? undefined: cellData}</Button>;
-            })}
-            <Button onClick={()=>{setData([...data, "a"]);}}>Debug: Añadir celda</Button>
+            {buffer.cells.map((cell, index) => (
+                <Button disabled={true} key={index}>{cell === null ? "" : cell}</Button>
+            ))}
         </ButtonGroup>
-        
     );
 };
-
-type DataCell = string|undefined;

@@ -1,1 +1,1 @@
-export { Borrar } from "./BORRAR";
+export { SimulatorComponent } from "./simulator-component";

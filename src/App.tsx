@@ -1,11 +1,20 @@
-import React from "react";
-import { Borrar } from "./simulation/components";
+import React, { useEffect } from "react";
+import { Provider } from "react-redux";
+import { SimulatorComponent } from "./simulation/components";
+import store, { inicializarSimulation } from "./simulation/data-store";
 
 export const App = () => {
+    useEffect(() => {
+        inicializarSimulation();
+    });
+
     return (
         <>
-        <div>This is an awesome new react app</div>
-        <Borrar />;
+        <h3>This is a TCP simulator. Future instructions will be added here...</h3>
+        <Provider store={store}>
+            <SimulatorComponent />
+        </Provider>
+        
         </>
     );
 };

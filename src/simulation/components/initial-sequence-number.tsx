@@ -6,12 +6,14 @@ import { inicializarSimulation, mapLogicToUi, nextStep, startSimulation, updateS
 import { RootState } from "../data-store/store";
 import { Peer } from "../models";
 
-export const InitialSequenceNumber = () => {
+interface InitialSequenceNumberProps {
+    isn: number
+}
+
+export const InitialSequenceNumberCard: React.FC<InitialSequenceNumberProps> = ({isn}) => {
     console.log("RENDERIZANDO...");
-    const [isn, setIsn] = useState<number|undefined>(14);
 
-    const dispatch = useDispatch();
-
+/*
     useEffect(() => {
         //const accion = startSimulation();
         //dispatch(accion);
@@ -30,7 +32,7 @@ export const InitialSequenceNumber = () => {
         
         return state.simulator.passivePeer;
     });
-
+*/
     /*
     const activeCtrlBlock = useSelector((state: RootState) => {
         console.log("Dentro de active Peer useSelector: ", state);
@@ -51,25 +53,6 @@ export const InitialSequenceNumber = () => {
 
 
     return (
-        <div>
-            <p>{isn === undefined ? "ISN = ?": `ISN = ${isn}`}</p>
-            <button onClick={() => {
-                setIsn(isn!+1);
-            }}>pene</button>
-            <p>{activePeer.application.dataToSend}</p>
-            <p>{passivePeer.application.dataReceived}</p>
-            <div>{activePeer.controlBlock.srcIp}</div>
-            <div>{activePeer.controlBlock.connectionState}</div>
-            <div>{passivePeer.controlBlock.srcIp}</div>
-            <div>{passivePeer.controlBlock.connectionState}</div>
-            <button onClick={(e) => {
-                simulation.runNextStep();
-                const accionMapeo = updateSimUiData(simulation);
-                dispatch(accionMapeo);
-                
-                console.log("Acciones despachadas, has pulsado botton");
-            }
-            }>Siguiente evento</button>
-        </div>    
+        <div>{isn}</div>    
     );
 };
