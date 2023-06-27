@@ -97,6 +97,10 @@ export function getLogicInitialState() {
         rtt: 2*1000,
     };
     
-    const simCfg: SimConfig = new SimConfig(activePeer, passivePeer, channel);
+    const simCfg: SimConfig = {
+        active: activePeer, 
+        passive: passivePeer, 
+        channel: channel
+    };
     return simCfg;    
 }

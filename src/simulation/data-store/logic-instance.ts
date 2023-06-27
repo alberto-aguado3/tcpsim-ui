@@ -3,17 +3,16 @@ import { getLogicInitialState } from "./init-states";
 
 
 //TODO: find way to pass starting config from components
-export const simulation: Simulation = new Simulation(getLogicInitialState());
+//1.Esto igual a null.
+//2.Que la config use datos del formulario (boton de "Start" lleva la config, crea instancia)
+//3.Profit!
+export const simulation: Simulation = new Simulation();
 
 export const inicializarSimulation = () => {
-    console.log("startSimulation - About to run");
     //TODO: handle error
-    simulation.linkPeers();
-
     const err: Error|null = simulation.startSimulation();
     if (err !== null) {
         console.log(err);
     }
 
-    console.log("startSimulation - finished running");
 };

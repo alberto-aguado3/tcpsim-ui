@@ -1,8 +1,4 @@
 import React from "react";
-import { Buffer, ControlBlock, Peer } from "../models";
-import { DataBuffer } from "./data-buffer";
-import { ReceiverBuffer } from "./receiver-buffer";
-import { SenderBuffer } from "./sender-buffer";
 
 interface NodeCardProps {
     isPassive: boolean

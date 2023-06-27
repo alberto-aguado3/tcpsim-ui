@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useRef } from "react";
 import store from "../data-store/store";
 import { DataBuffer } from "./data-buffer";
 import { InitialSequenceNumberCard } from "./initial-sequence-number";
-import { Provider, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { PeerComponent } from "./peer-component";
 import { Button } from "@mui/base";
 import { simulation, updateSimUiData } from "../data-store";
+import { Simulation } from "tcpsim-logic";
+import { ConfigurationComponent } from "./configuration-component";
 
 export const SimulatorComponent = () => {
     const dispatch = useDispatch();
+
+    const simulationRef = useRef(new Simulation);
+
+
     return (
-        <Provider store={store}>
+        <div>
             <PeerComponent isPassive={false} />
 
             -------------Channel---------------
@@ -18,10 +24,12 @@ export const SimulatorComponent = () => {
             <PeerComponent isPassive={true} />
 
             <Button onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                simulation.runNextStep();
-                const updateUiAction = updateSimUiData(simulation);
+                simulationRef.current.runNextStep();
+                const updateUiAction = updateSimUiData(simulationRef.current);
                 dispatch(updateUiAction);
             }} > Next Event</Button>
-        </Provider>
+
+            <ConfigurationComponent simulation={simulationRef.current} />
+        </div>
     );
 };

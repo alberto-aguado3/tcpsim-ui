@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Peer as LogicPeer, Simulation, TransmissionControlBlock, Application as LogicApplication, DataBuffer, GetConnectionStateString } from "tcpsim-logic";
+import { Peer as LogicPeer, Simulation, TransmissionControlBlock, Application as LogicApplication, DataBuffer, GetConnectionStateString, Channel as LogicChannel, SegmentWithTimestamp} from "tcpsim-logic";
 //import { Simulation } from "tcpsim-logic/dist/simulation";
 //import { Peer as LogicPeer, Application as LogicApplication, DataBuffer, GetConnectionStateString } from "tcpsim-logic/dist/peer";
 //import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
-import { Application, ControlBlock, Buffer, Peer, Channel, ConnectionState } from "../models";
+import { Application, ControlBlock, Buffer, Peer, Channel, ConnectionState, Segment, mapLogicToUiSegment, TravelState } from "../models";
 import { getUiInitialState } from "./init-states";
 
 export interface UiState {
@@ -59,6 +59,33 @@ function mapLogicToUiRecvBuffer(rcvBuffer: DataBuffer): Buffer {
     };
 }
 
+function mapLogicToUiChannel(channel: LogicChannel): Channel {
+
+    return {
+        lossPercent: 0,
+        segments: combineLogicSegmentsToUi(channel.deliveredSegments, channel.lostSegments),
+    };
+}
+
+function combineLogicSegmentsToUi(delivered: SegmentWithTimestamp[], lost: SegmentWithTimestamp[]): Segment[] {
+    const segments: Segment[] = [];
+
+    let i = 0;
+    let j = 0;
+
+    while (i < delivered.length && j < lost.length) {
+        if (delivered[i].createdAt <= lost[j].createdAt) {
+            segments.push(mapLogicToUiSegment(delivered[i], "DELIVERED"));
+            i++;
+        } else {
+            segments.push(mapLogicToUiSegment(lost[i], "LOST"));
+            j++;
+        }
+    }
+
+    return segments;
+}
+
 export const uiInitialState: UiState = getUiInitialState();
 
 const simulatorSlice = createSlice({
@@ -66,12 +93,14 @@ const simulatorSlice = createSlice({
     initialState: uiInitialState,
     reducers: {
         updateSimUiData: (state, action: PayloadAction<Simulation>) => {
-            const actPeer = action.payload.getActivePeer();
-            const pasPeer = action.payload.getPassivePeer();
+            const actPeer = action.payload.activePeer;
+            const pasPeer = action.payload.passivePeer;
             state.activePeer = mapLogicToUiPeer(actPeer);
             state.passivePeer = mapLogicToUiPeer(pasPeer);
 
             //TODO: get segments as state in some way
+            state.channel = mapLogicToUiChannel(action.payload.channel);
+
             /*
             return {
                 
