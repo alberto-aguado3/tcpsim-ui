@@ -1,13 +1,9 @@
 import React, { useEffect } from "react";
 import { Provider, useSelector } from "react-redux";
 import { SegmentHistory, SimulatorComponent } from "./simulation/components";
-import store, { inicializarSimulation, RootState, simulation } from "./simulation/data-store";
+import store from "./simulation/data-store";
 
 export const App = () => {
-    useEffect(() => {
-        inicializarSimulation();
-    });
-    
 
     return (
         <>

@@ -26,10 +26,8 @@ export const ConfigurationComponent: React.FC<ConfigurationComponentProps> = ({ 
     };
 
     const [configuration, setConfiguration] = useState<SimConfig>(initialConfig);
-    console.log(configuration);
 
     const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.name, event.target.value);
         const {name, value} = event.target;
 
         if (name.includes(".")) {
@@ -55,7 +53,7 @@ export const ConfigurationComponent: React.FC<ConfigurationComponentProps> = ({ 
 
         simulation.loadConfig(configuration);
 
-        simulation.startSimulation();
+        //simulation.startSimulation();
         dispatch(updateSimUiData(simulation));
 
     };
@@ -67,7 +65,7 @@ export const ConfigurationComponent: React.FC<ConfigurationComponentProps> = ({ 
             <label>
                 Data to send:
                 <input type="text" name="active.applicationData" value={configuration.active.applicationData} onChange={handleChange} />
-                <button type="submit" >Start simulation</button>
+                <button type="submit" >Load configuration</button>
             </label>
         </form>
     );
