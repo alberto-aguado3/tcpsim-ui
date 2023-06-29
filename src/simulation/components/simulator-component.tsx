@@ -10,6 +10,7 @@ import { Simulation } from "tcpsim-logic";
 import { ConfigurationComponent } from "./configuration-component";
 import { TimerComponent } from "./timer-component";
 import { SimulatorControls } from "./simulator-controls";
+import { ChannelComponent } from "./channel-component";
 
 export const SimulatorComponent = () => {
     const dispatch = useDispatch();
@@ -44,9 +45,6 @@ export const SimulatorComponent = () => {
                 }
             }
         }
-
-
-
     
       return () => {
         
@@ -58,7 +56,7 @@ export const SimulatorComponent = () => {
         <div>
             <PeerComponent isPassive={false} />
 
-            -------------Channel---------------
+            <ChannelComponent simulation={simulationRef.current} />
 
             <PeerComponent isPassive={true} />
 

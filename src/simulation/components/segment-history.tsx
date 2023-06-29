@@ -3,8 +3,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "../data-store";
 import { Segment } from "../models";
 
-export const SegmentHistory: React.FC = () => {
-    const delivered: Segment[] = useSelector((state: RootState) => state.simulator.channel.segments);
+export const HistoryComponent: React.FC = () => {
+    const delivered: Segment[] = useSelector((state: RootState) => state.simulator.history.segments);
 
     return (
         <div>

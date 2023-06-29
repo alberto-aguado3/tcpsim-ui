@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Provider, useSelector } from "react-redux";
-import { SegmentHistory, SimulatorComponent } from "./simulation/components";
+import { HistoryComponent, SimulatorComponent } from "./simulation/components";
 import store from "./simulation/data-store";
 
 export const App = () => {
@@ -20,7 +20,7 @@ export const App = () => {
             ---------------------------
 
             <h2>Seccion historial</h2>
-            <SegmentHistory></SegmentHistory>
+            <HistoryComponent></HistoryComponent>
         </Provider>
         
         </>

@@ -11,5 +11,5 @@ export class Channel2 {
 
 export type Channel = {
     segments: Segment[],
-    lossPercent: number,
+    //lossPercent: number,
 }

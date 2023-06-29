@@ -3,13 +3,14 @@ import { Peer as LogicPeer, Simulation, TransmissionControlBlock, Application as
 //import { Simulation } from "tcpsim-logic/dist/simulation";
 //import { Peer as LogicPeer, Application as LogicApplication, DataBuffer, GetConnectionStateString } from "tcpsim-logic/dist/peer";
 //import { TransmissionControlBlock } from "tcpsim-logic/dist/peer/transmission-control-block";
-import { Application, ControlBlock, Buffer, Peer, Channel, ConnectionState, Segment, mapLogicToUiSegment, TravelState } from "../models";
+import { Application, ControlBlock, Buffer, Peer, Channel, ConnectionState, Segment, mapLogicToUiSegment, TravelState, History } from "../models";
 import { getUiInitialState } from "./init-states";
 
 export interface UiState {
     activePeer: Peer
     passivePeer: Peer
     channel: Channel
+    history: History
 }
 
 //TODO: refactor into "mapper-service.ts ???"
@@ -60,15 +61,26 @@ function mapLogicToUiRecvBuffer(rcvBuffer: DataBuffer): Buffer {
 }
 
 function mapLogicToUiChannel(channel: LogicChannel): Channel {
+    let wanderingSegments: Segment[] = channel.wanderingSegments.map(simulationSegment => {
+        return mapLogicToUiSegment(simulationSegment, "WANDERING");
+    });
 
     return {
-        lossPercent: 0,
-        segments: combineLogicSegmentsToUi(channel.deliveredSegments, channel.lostSegments),
-    };
+        segments: wanderingSegments, 
+    }; 
+    
 }
 
 function combineLogicSegmentsToUi(delivered: SegmentWithTimestamp[], lost: SegmentWithTimestamp[]): Segment[] {
     const segments: Segment[] = [];
+
+    if (lost.length === 0) {
+        return delivered.map(segment => mapLogicToUiSegment(segment, "DELIVERED"));
+    }
+
+    if (delivered.length === 0) {
+        return lost.map(segment => mapLogicToUiSegment(segment, "LOST"));
+    }
 
     let i = 0;
     let j = 0;
@@ -78,12 +90,19 @@ function combineLogicSegmentsToUi(delivered: SegmentWithTimestamp[], lost: Segme
             segments.push(mapLogicToUiSegment(delivered[i], "DELIVERED"));
             i++;
         } else {
-            segments.push(mapLogicToUiSegment(lost[i], "LOST"));
+            segments.push(mapLogicToUiSegment(lost[j], "LOST"));
             j++;
         }
     }
 
     return segments;
+}
+
+function mapLogicToUiHistory(channel: LogicChannel): History {
+    return {
+        //lossPercent: 0,
+        segments: combineLogicSegmentsToUi(channel.deliveredSegments, channel.lostSegments),
+    };
 }
 
 export const uiInitialState: UiState = getUiInitialState();
@@ -98,8 +117,9 @@ const simulatorSlice = createSlice({
             state.activePeer = mapLogicToUiPeer(actPeer);
             state.passivePeer = mapLogicToUiPeer(pasPeer);
 
-            //TODO: get segments as state in some way
             state.channel = mapLogicToUiChannel(action.payload.channel);
+
+            state.history = mapLogicToUiHistory(action.payload.channel);
 
             /*
             return {

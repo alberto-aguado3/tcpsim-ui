@@ -76,31 +76,15 @@ export function getUiInitialState(): UiState {
     //const channel: Channel = new Channel(0);
     const channel: Channel = {
         segments: [],
-        lossPercent: 0,
+        //lossPercent: 0,
     };
 
     return {
-        //simulator: new Simulator(active, passive, channel)
         activePeer: active,
         passivePeer: passive,
-        channel: channel
+        channel: channel,
+        history: {
+            segments: []
+        },
     };
-}
-
-export function getLogicInitialState() {
-    const activePeer: PeerConfig = {
-        applicationData: "Prueba de enviar datos"
-    };
-    const passivePeer: PeerConfig = {};
-    const channel: ChannelConfig = {
-        lossPercent: 0,
-        rtt: 2*1000,
-    };
-    
-    const simCfg: SimConfig = {
-        active: activePeer, 
-        passive: passivePeer, 
-        channel: channel
-    };
-    return simCfg;    
 }

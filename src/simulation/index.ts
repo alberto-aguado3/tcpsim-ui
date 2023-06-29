@@ -1,1 +1,1 @@
-export {SimulatorComponent, SegmentHistory} from "./components";
+export {SimulatorComponent, HistoryComponent} from "./components";
