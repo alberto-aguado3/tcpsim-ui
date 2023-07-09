@@ -16,6 +16,7 @@ export const PeerComponent: React.FC<PeerComponentProps> = ({isPassive}) => {
         if (isPassive) {
             return state.simulator.passivePeer;
         } else {
+            //console.log("Active send progress: ", (state.simulator.activePeer.controlBlock.sndNxt - state.simulator.activePeer.sendBuffer.startIndex) / (state.simulator.activePeer.sendBuffer.cells.length) * 100);
             return state.simulator.activePeer;
         }
     });
@@ -23,8 +24,8 @@ export const PeerComponent: React.FC<PeerComponentProps> = ({isPassive}) => {
     return (
         <div>
             <ApplicationComponent application={peer.application} />
-            <SenderBuffer buffer={peer.sendBuffer} controlBlock={peer.controlBlock} />
-            <ReceiverBuffer buffer={peer.recvBuffer} controlBlock={peer.controlBlock} />
+            <SenderBuffer sendBuffer={peer.sendBuffer} controlBlock={peer.controlBlock} />
+            <ReceiverBuffer recvBuffer={peer.recvBuffer} controlBlock={peer.controlBlock} />
             
             <PeerCard isPassive={isPassive} peer={peer} />
             

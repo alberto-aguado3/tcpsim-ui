@@ -14,12 +14,10 @@ export const TimerComponent: React.FC<TimerComponentProps> = ({ date, updateDate
 
     const refreshRate: number = 0.1;
 
-    const simulationSpeedFactor: number = 1; //TODO: pasar a Redux
+    const simulationSpeedFactor: number = 1.4; //TODO: pasar a Redux
 
-    console.log("Timer - Rendering...");
 
     useEffect(() => {
-        console.log("Timer - isTimerRunning: ", isTimerRunning);
         if (!isTimerRunning) {
             if (periodIdRef.current !== null) {
                 clearTimeout(periodIdRef.current);
@@ -32,12 +30,11 @@ export const TimerComponent: React.FC<TimerComponentProps> = ({ date, updateDate
         if (isTimerRunning) {
             periodStartRef.current = Date.now();
 
-            console.log("isTimerRunning true. periodIdRef: ", periodIdRef.current);
-
             if (periodIdRef.current === null) {
                 const timeoutId = setTimeout(() => {
                     updateDate(new Date(date.getTime() + (refreshRate)*simulationSpeedFactor*1000)); //incremento = refresco, escala (real) * factorVelocidad (simulacion)
                     periodIdRef.current = null;
+                    periodRemainingRef.current = 0;
                 }, (refreshRate)*1000 - periodRemainingRef.current );
 
                 periodIdRef.current = timeoutId as unknown as number;

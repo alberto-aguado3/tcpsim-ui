@@ -12,12 +12,21 @@ export const ConfigurationComponent: React.FC<ConfigurationComponentProps> = ({ 
     //const dataToARef = useRef<HTMLInputElement>(null);
 
     const dispatch = useDispatch();
+    const sharedMss = 5;
+    const sharedMaxAnnounceableWindow = 10;
+    const sharedRecvBufCap = 15;
     const initialConfig: SimConfig = {
         active: {
+            mss: sharedMss,
+            maxAnnounceableWindow: sharedMaxAnnounceableWindow,
+            recvBuffCapacity: sharedRecvBufCap,
             
         },
         passive:{
-
+            mss: sharedMss,
+            maxAnnounceableWindow: sharedMaxAnnounceableWindow,
+            recvBuffCapacity: sharedRecvBufCap,
+            
         },
         channel: {
             lossPercent: 0,
@@ -65,16 +74,16 @@ export const ConfigurationComponent: React.FC<ConfigurationComponentProps> = ({ 
             <label>
                 Data to send:
                 <input type="text" name="active.applicationData" value={configuration.active.applicationData} onChange={handleChange} />
-                <button type="submit" >Load configuration</button>
             </label>
+            
+            <h3>Passive peer</h3>
+            <label>
+                Data to send:
+                <input type="text" name="passive.applicationData" value={configuration.passive.applicationData} onChange={handleChange} />
+            </label>
+            <button type="submit" >Load configuration</button>
+
         </form>
     );
 
-    /*
-                <label htmlFor="dataToB" >Data to send to B:</label>
-            <input name="dataToB" type="text" ref={dataToBRef}></input>
-            <label htmlFor="dataToA">Data to send to A:</label>
-            <input name="dataToA" type="text" ref={dataToARef}></input>
-            <button type="button" onClick={handleSimulationStart}>Start simulation</button>
-    */
 };

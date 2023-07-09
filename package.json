@@ -27,6 +27,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^8.0.5",
+    "react-spring": "^9.7.2",
     "redux": "^4.2.1",
     "tcpsim-logic": "^1.0.0"
   },
