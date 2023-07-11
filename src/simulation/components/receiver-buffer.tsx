@@ -43,7 +43,7 @@ export const ReceiverBuffer: React.FC<ReceiverBufferProps> = ({recvBuffer, contr
     }
 
     const animatedStylesAcked = useSpring({
-        //flexBasis: recvWindow.sizeAcked / recvBuffer.cells.length * 100,
+        //flexBasis: recvWindow.sizeAcked / recvBuffer.cells.length * 100, //with scaling, it had an additional factor "/ 100" so they cancel out
         flexBasis: recvWindow.sizeAcked * scaling,
         config: { duration: animationDuration }
     });

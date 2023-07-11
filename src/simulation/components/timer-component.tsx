@@ -14,7 +14,7 @@ export const TimerComponent: React.FC<TimerComponentProps> = ({ date, updateDate
 
     const refreshRate: number = 0.1;
 
-    const simulationSpeedFactor: number = 1.4; //TODO: pasar a Redux
+    const simulationSpeedFactor: number = 1; //TODO: pasar a Redux
 
 
     useEffect(() => {

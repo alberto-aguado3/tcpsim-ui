@@ -14,7 +14,7 @@ export const App = () => {
 
             ---------------------------
 
-            <h2>Seccion historial</h2>
+            <h2>History</h2>
             <HistoryComponent></HistoryComponent>
         </Provider>
         
