@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { animated, useSpring } from "react-spring";
 import { Simulation } from "tcpsim-logic";
-import { RootState } from "../data-store";
+import { RootState, updateSimUiData } from "../data-store";
 import { Segment, Buffer, Peer } from "../models";
 
 interface ChannelComponentProps {
     isSimulationRunning: boolean,
+    simulation: Simulation,
 }
 
-export const ChannelComponent: React.FC<ChannelComponentProps> = ({ isSimulationRunning }) => {
+export const ChannelComponent: React.FC<ChannelComponentProps> = ({ isSimulationRunning, simulation }) => {
     const simulator = useSelector((state: RootState) => state.simulator);
 
     const currentAnimatedSegmentsRef = useRef<Segment[]>([]);
@@ -118,6 +119,7 @@ export const ChannelComponent: React.FC<ChannelComponentProps> = ({ isSimulation
                         sourcePeer={srcPeer}
                         destinationPeer={dstPeer}
                         isAnimating={isSimulationRunning}
+                        simulation={simulation}
                     />
                 );
             })}
@@ -133,10 +135,12 @@ interface AnimatedSegmentProps {
     sourcePeer: Peer,
     destinationPeer: Peer,
     isSrcPassive: boolean,
-    isAnimating: boolean
+    isAnimating: boolean,
+    simulation: Simulation,
 }
 
-const AnimatedSegment: React.FC<AnimatedSegmentProps> = ({ data, parentHeight, parentWidth, sourcePeer, destinationPeer, isSrcPassive, isAnimating }) => {
+const AnimatedSegment: React.FC<AnimatedSegmentProps> = ({ data, parentHeight, parentWidth, sourcePeer, destinationPeer, isSrcPassive, isAnimating, simulation }) => {
+    const dispatch = useDispatch();
     const segmentHeight = parentHeight/10;
 
     const scaleSrc = parentWidth / sourcePeer.sendBuffer.cells.length;
@@ -200,7 +204,9 @@ const AnimatedSegment: React.FC<AnimatedSegmentProps> = ({ data, parentHeight, p
 
             left: leftOffsetParent,
         }} onClick={() => {
-            alert("Ayoo");
+            console.log("Voy a borrar segmento con id: ", data.id);
+            simulation.dropWanderingSegment(data.id);
+            dispatch(updateSimUiData(simulation));
         }}>
             {data.payload.length > 0 && <animated.div style={{
                 //...animationProps,

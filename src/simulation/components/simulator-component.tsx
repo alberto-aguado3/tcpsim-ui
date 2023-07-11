@@ -56,7 +56,7 @@ export const SimulatorComponent = () => {
         <div>
             <PeerComponent isPassive={false} />
 
-            <ChannelComponent isSimulationRunning={isSimulationRunning} />
+            <ChannelComponent isSimulationRunning={isSimulationRunning} simulation={simulationRef.current} />
 
             <PeerComponent isPassive={true} />
 

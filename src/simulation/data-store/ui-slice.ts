@@ -85,15 +85,21 @@ function combineLogicSegmentsToUi(delivered: SegmentWithTimestamp[], lost: Segme
     let i = 0;
     let j = 0;
 
-    while (i < delivered.length && j < lost.length) {
-        if (delivered[i].createdAt <= lost[j].createdAt) {
-            segments.push(mapLogicToUiSegment(delivered[i], "DELIVERED"));
-            i++;
+    while (i < delivered.length || j < lost.length) {
+        if (i >= delivered.length) {
+          segments.push(mapLogicToUiSegment(lost[j], "LOST"));
+          j++;
+        } else if (j >= lost.length) {
+          segments.push(mapLogicToUiSegment(delivered[i], "DELIVERED"));
+          i++;
+        } else if (delivered[i].createdAt <= lost[j].createdAt) {
+          segments.push(mapLogicToUiSegment(delivered[i], "DELIVERED"));
+          i++;
         } else {
-            segments.push(mapLogicToUiSegment(lost[j], "LOST"));
-            j++;
+          segments.push(mapLogicToUiSegment(lost[j], "LOST"));
+          j++;
         }
-    }
+      }
 
     return segments;
 }
