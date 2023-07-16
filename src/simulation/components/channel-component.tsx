@@ -4,6 +4,7 @@ import { animated, useSpring } from "react-spring";
 import { Simulation } from "tcpsim-logic";
 import { RootState, updateSimUiData } from "../data-store";
 import { Segment, Buffer, Peer } from "../models";
+import Modal from "react-modal";
 
 interface ChannelComponentProps {
     isSimulationRunning: boolean,
@@ -34,13 +35,11 @@ export const ChannelComponent: React.FC<ChannelComponentProps> = ({ isSimulation
         */
 
         simulator.channel.segments.forEach((storeSegment) => {
-            console.log("EVALUO segmento");
             const storeSegmentExists = currentAnimatedSegmentsRef.current.find((currentSegment) => {
                 return storeSegment.id === currentSegment.id;
             });
 
             if (!storeSegmentExists) {
-                //crear y animar
                 currentAnimatedSegmentsRef.current.push(storeSegment);
             }
         });
@@ -62,40 +61,7 @@ export const ChannelComponent: React.FC<ChannelComponentProps> = ({ isSimulation
     }, [simulator.channel.segments]);
 
     return (
-        <div style={{width: `${width}px`, height: `${height}px`, background: "#66ccff", position: "relative"}}>
-            {/*
-            <div style={{
-                border: "2px solid black",
-                position:"absolute",
-                left: 100,
-                top: 0,
-                width: 90,
-                height: 50,
-            }}>
-                <div style={{
-                    backgroundColor: "blanchedalmond",
-                    height: 50,
-                    width: 50,
-                    left: 0,
-                    top: 0,
-                    zIndex: 2,
-                    position: "absolute",
-                    opacity: 0.5,
-                }}></div>
-
-                <div style={{
-                    backgroundColor: "yellowgreen",
-                    height: 50,
-                    width: 50,
-                    //left: 200,
-                    right: 0,
-                    top: (0),
-                    zIndex: 2,
-                    position: "absolute",
-                    opacity: 0.5,
-                }}></div>
-            </div>
-*/}            
+        <div style={{width: `${width}px`, height: `${height}px`, background: "#66ccff", position: "relative"}}>  
 
             {currentAnimatedSegmentsRef.current.map((animatedSegment) => {
                 let srcPeer: Peer,  dstPeer:Peer, isPassive: boolean;
@@ -140,6 +106,8 @@ interface AnimatedSegmentProps {
 }
 
 const AnimatedSegment: React.FC<AnimatedSegmentProps> = ({ data, parentHeight, parentWidth, sourcePeer, destinationPeer, isSrcPassive, isAnimating, simulation }) => {
+    const [modalIsOpen, setModalIsOpen] = useState(false);    
+
     const dispatch = useDispatch();
     const segmentHeight = parentHeight/10;
 
@@ -193,43 +161,57 @@ const AnimatedSegment: React.FC<AnimatedSegmentProps> = ({ data, parentHeight, p
 
 
     return (
-        <animated.div key={data.id} style={{
-            ...animationProps,
-            border: `2px solid ${borderColor}`,
-            position: "absolute",
+        <div>
+            <animated.div key={data.id} style={{
+                ...animationProps,
+                border: `2px solid ${borderColor}`,
+                position: "absolute",
 
-            height: parentHeight/10,
-            width: widthParent,
-            zIndex: 1,
+                height: parentHeight/10,
+                width: widthParent,
+                zIndex: 1,
 
-            left: leftOffsetParent,
-        }} onClick={() => {
-            console.log("Voy a borrar segmento con id: ", data.id);
-            simulation.dropWanderingSegment(data.id);
-            dispatch(updateSimUiData(simulation));
-        }}>
-            {data.payload.length > 0 && <animated.div style={{
-                //...animationProps,
-                zIndex: 2,
-                //left: leftOffsetPayload, 
-                //left: 0,
-                left: (leftOffsetPayload - leftOffsetParent),
-                width: widthPayload,
-                height: parentHeight/10,
-                backgroundColor: "pink", 
-                opacity: 0.5,
-                position:"absolute"}}></animated.div>}
-            {<animated.div style={{
-                //...animationProps,
-                zIndex: 2,
-                //left: leftOffsetAck, 
-                //right: 0,
-                left: (leftOffsetAck - leftOffsetParent),
-                width: widthAck, 
-                height: parentHeight/10,
-                backgroundColor: "#00FFFF", 
-                opacity: 0.5,
-                position:"absolute"}}> </animated.div>}
-        </animated.div>
+                left: leftOffsetParent,
+            }} onClick={() => {
+                setModalIsOpen(true);
+            }}>
+                {data.payload.length > 0 && <animated.div style={{
+                    //...animationProps,
+                    zIndex: 2,
+                    //left: leftOffsetPayload, 
+                    //left: 0,
+                    left: (leftOffsetPayload - leftOffsetParent),
+                    width: widthPayload,
+                    height: parentHeight/10,
+                    backgroundColor: "pink", 
+                    opacity: 0.5,
+                    position:"absolute"}}></animated.div>}
+                {<animated.div style={{
+                    //...animationProps,
+                    zIndex: 2,
+                    //left: leftOffsetAck, 
+                    //right: 0,
+                    left: (leftOffsetAck - leftOffsetParent),
+                    width: widthAck, 
+                    height: parentHeight/10,
+                    backgroundColor: "#00FFFF", 
+                    opacity: 0.5,
+                    position:"absolute"}}> </animated.div>}
+            </animated.div>
+
+            <Modal isOpen={modalIsOpen} onRequestClose={() => {setModalIsOpen(false);}}>
+                <p>Seq Number: {data.header.seqNumber}</p>
+                <p>Ack Number: {data.header.ackNumber}</p>
+                <p>Window: {data.header.window}</p>
+                <p>SYN: {data.header.controlBits.syn ? "true": "false"}</p>
+                <p>ACK: {data.header.controlBits.ack ? "true": "false"}</p>
+                <p>FIN: {data.header.controlBits.fin ? "true": "false"}</p>
+                <button onClick={() => {
+                simulation.dropWanderingSegment(data.id);
+                dispatch(updateSimUiData(simulation));
+                }
+                }>Delete segment</button>
+            </Modal>
+        </div>
     );
 };
